@@ -69,7 +69,7 @@ palloc_init (size_t user_page_limit)
    FLAGS, in which case the kernel panics. */
 void *
 palloc_get_multiple (enum palloc_flags flags, size_t page_cnt)
-{ //printf("hIHIHIHI111111\n");
+{ printf("hIHIHIHI111111\n");
   struct pool *pool = flags & PAL_USER ? &user_pool : &kernel_pool;
   void *pages;
   size_t page_idx;
@@ -77,7 +77,7 @@ palloc_get_multiple (enum palloc_flags flags, size_t page_cnt)
   if (page_cnt == 0)
     return NULL;
   
-  lock_acquire (&pool->lock);//printf("hIHIHIHI2\n");
+  lock_acquire (&pool->lock);printf("hIHIHIHI2\n");
   page_idx = bitmap_scan_and_flip (pool->used_map, 0, page_cnt, false);
   lock_release (&pool->lock);
 
@@ -109,7 +109,7 @@ palloc_get_multiple (enum palloc_flags flags, size_t page_cnt)
    FLAGS, in which case the kernel panics. */
 void *
 palloc_get_page (enum palloc_flags flags) 
-{//printf("hIHIHIHI111111\n");
+{printf("hIHIHIHI111111\n");
   return palloc_get_multiple (flags, 1);
 }
 

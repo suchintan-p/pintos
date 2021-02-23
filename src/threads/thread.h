@@ -4,6 +4,7 @@
 #include <debug.h>
 #include <list.h>
 #include <stdint.h>
+#include <threads/fixed-point.h> //change2
 
 /* States in a thread's life cycle. */
 enum thread_status
@@ -101,6 +102,8 @@ struct thread
     /* Owned by thread.c. */
     unsigned magic;                     /* Detects stack overflow. */
     int64_t wake_up_tick;               //change
+    fixed_point nice;                   //change2
+    fixed_point recent_cpu;             //change2
   };
 
 /* If false (default), use round-robin scheduler.
@@ -139,7 +142,15 @@ void thread_set_nice (int);
 int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
 
-void thread_sleep(int64_t);
-void thread_wake(int64_t);
-bool compare_wake_up_tick(const struct list_elem *, const struct list_elem *, void *);
+void thread_sleep(int64_t); //change
+void thread_wake(int64_t);  //change
+void wake_up_thread(void); //change2
+bool compare_wake_up_tick(const struct list_elem *, const struct list_elem *, void *); //change
+
+//change2
+bool compare_priority(const struct list_elem *, const struct list_elem *, void *);
+void thread_tick_update_priority(struct thread *t);
+void thread_tick_update_load_avg(void);
+void thread_tick_update_recent_cpu(struct thread *curr);
+//change2
 #endif /* threads/thread.h */
